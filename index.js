@@ -6,7 +6,7 @@ const port = process.env.PORT || 8080; //Line 3
 app.listen(port, () => console.log(`Listening on port ${port}`)); //Line 6
 
 // create a GET route
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   //Line 9
   res.send({ express: "YOUR EXPRESS BACKEND IS CONNECTED TO REACT" }); //Line 10
 }); //Line 11
