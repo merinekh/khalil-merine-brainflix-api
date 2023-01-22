@@ -15,5 +15,5 @@ app.use(express.static("public"));
 
 app.use(express.static("public"));
 
-app.use("/", videoRoutes);
+app.use("/videos", videoRoutes);
 app.listen(port, () => console.log(`Listening on port ${port}`)); //Line 6
