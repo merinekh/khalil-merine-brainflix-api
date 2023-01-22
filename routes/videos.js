@@ -2,37 +2,49 @@ const data = require("../data/videos.json");
 const express = require("express");
 const router = express.Router();
 const { v4: uuidv4 } = require("uuid");
-
+const fs = require("fs");
 // =========================create a GET route for videos=========================================
 router.get("/", (req, res) => {
-  res.send(data);
+  const readVideos = fs.readFileSync("./data/videos.json");
+  const videos = JSON.parse(readVideos);
+
+  res.json(videos);
+  // res.send(data);
 });
 
 // ==================create a GET route for videos details========================================
 const videosId = require("../data/videos.json");
 
 router.get("/:id", (req, res) => {
+  const readVideos = fs.readFileSync("./data/videos.json");
+  const videos = JSON.parse(readVideos);
+
+  res.json(videos);
   //Line 9
-  const videoId = videosId.find((element) => element.id === req.params.id);
+  const videoId = videos.find((element) => element.id === req.params.id);
   if (videoId) {
     req.params;
-    res.send(videoId);
+    res.json(videoId);
   } else {
-    res.send("Couldn't import data from the API");
+    res.json("Couldn't import data from the API");
   }
 });
 
 // ==================create a POST request for new Video==========================================
 
-router.post("/videos", (req, res) => {
-  const { title, descr } = req.body;
+router.post("/", (req, res) => {
+  const readVideos = fs.readFileSync("./data/videos.json");
+  const videos = JSON.parse(readVideos);
+
+  const { title, description } = req.body;
+  // console.log(title, description);
+
   const newVideo = {
     id: uuidv4(),
     title,
-    channel,
-    image: "http://localhost:8080/images/Upload-video-preview.jpg",
-    description:
-      "On a gusty day in Southern Utah, a group of 25 daring mountain bikers blew the doors off what is possible on two wheels, unleashing some of the biggest moments the sport has ever seen. While mother nature only allowed for one full run before the conditions made it impossible to ride, that was all that was needed for event veteran Kyle Strait, who won the event for the second time -- eight years after his first Red Cow Rampage title",
+    channel: "Khalil Channel",
+    image: "http://localhost:8080/images/Upload-video-preview.jpeg",
+    description,
     views: "12,220",
     likes: "11,330",
     duration: "1:01",
@@ -65,8 +77,11 @@ router.post("/videos", (req, res) => {
       },
     ],
   };
-  data.push(newVideo);
-  res.json(newVideo);
+
+  videos.push(newVideo);
+  fs.writeFileSync("./data/videos.json", JSON.stringify(videos));
+
+  res.status(201).send("Video Upload Thank You!");
 });
 
 module.exports = router;
